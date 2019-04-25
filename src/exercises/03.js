@@ -64,22 +64,21 @@ class Toggle extends React.Component {
     <Switch on={contextValue.on} onClick={contextValue.toggle} {...props} />
     )}
   </ToggleContext.Consumer>)  
-  state = {on: false}
   toggle = () =>
     this.setState(
       ({on}) => ({on: !on}),
       () => this.props.onToggle(this.state.on),
     )
+  state = {on: false, toggle: this.toggle}
   render() {
     // Because this.props.children is _immediate_ children only, we need
     // to 🐨 remove this map function and render our context provider with
     // this.props.children as the children of the provider. Then we'll
     // expose the `on` state and `toggle` method as properties in the context
     // value (the value prop).
-    return <ToggleContext.Provider value={{
-      on: this.state.on,
-      toggle: this.toggle,
-    }}>{this.props.children}</ToggleContext.Provider>
+    return <ToggleContext.Provider value={this.state}>
+      {this.props.children}
+    </ToggleContext.Provider>
   }
 }
 
